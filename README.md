@@ -30,11 +30,14 @@ lockenv
 
 + After editing the env file save it and close the file, it will be encrypted automatically
 
+![Default command Screenshot](https://raw.githubusercontent.com/abhiramsreekumar/lockenv/main/screenshots/default.png)
 
 ```
 lockenv -e production
 ```
 + You can specify an environment, and it will open the environment specific key and env file, if not exist will create
+
+![Default command Screenshot](https://raw.githubusercontent.com/abhiramsreekumar/lockenv/main/screenshots/environment-specific.png)
 
 ```
 lockenv -e production -k keyfile or key-string
