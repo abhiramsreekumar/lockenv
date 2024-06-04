@@ -50,7 +50,7 @@ lockenv -e production -f envfile
 
 #### Examples
 ```
-lockenv -k key-string N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4= -f test.env
+lockenv -k N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4= -f test.env
 ```
 + encrypting specifying key and env file manually
 
@@ -71,6 +71,6 @@ lockenv -d -e production
 
 #### Examples
 ```
-lockenv -d -k key-string N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4= -f test.env
+lockenv -d -k N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4= -f test.env
 ```
 + Decrypting specifying key and env file manually

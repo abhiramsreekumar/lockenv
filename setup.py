@@ -3,14 +3,14 @@ import setuptools
 
 setuptools.setup(
     name="lockenv",
-    version="1.0",
+    version="1.1",
     scripts=["lockenv"],
     author="Abhiram Sreekumar",
     author_email="ferncrypter@randomsasi.in",
     description="A utility to encrypt and decrypt env variables to safely store them in code repositories",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/abhiramsreekumar",
+    url="https://github.com/abhiramsreekumar/lockenv",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
