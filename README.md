@@ -3,7 +3,7 @@
 A Helper pip package for encrypting env's to be stored safely in code repositories
 
 
-### Assumptions:
+#### Assumptions:
 
 + Assuming python3 is installed on your system.
 + Nano is installed on your system
@@ -16,47 +16,61 @@ Install `lockenv` on your system using :
 pip install lockenv
 ```
 
-## Encryption Options
+### Encryption Options
 
 ```
 lockenv
 ```
 
-+ Running the command will check for any 'fkey' files in the current path, if found will read the key, if not it will prompt to generate a new key:
++ The command will check for any 'fkey' files in the current path, if found will read the key, if not it will prompt to generate a new key
 
++ Secondly it will look for an env file in the current path, if found will read env, if nit will prompt to generate a new env
 
++ It will automatically open the decrypted version of env in Visual Studio Code, if it is not installed, it will open nano editor
 
++ After editing the env file save it and close the file, it will be encrypted automatically
 
-+ environment specific
 
 ```
-ferncrypter -e production
+lockenv -e production
 ```
-
-
-+ Pass key manually
++ You can specify an environment, and it will open the environment specific key and env file, if not exist will create
 
 ```
-ferncrypter -e production -k keyfile or key-string
+lockenv -e production -k keyfile or key-string
 ```
 
-## Decryption Options
-
-+ Decrypt env
-
-```
-ferncrypter -d
-```
-
-+ Environment specific
++ You can also specify keys manually
++ the key can be either the keyfile name or the key as a string
 
 ```
-ferncrypter -d -e production
+lockenv -e production -f envfile
 ```
++ The env file can also be manually specified
 
-+ Pass key manually
+#### Examples
+```
+lockenv -k key-string N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4= -f test.env
+```
++ encrypting specifying key and env file manually
+
+
+### Decryption Options
+
+```
+lockenv -d
+```
++ It will decypt the env file, if multiple env or keys are found it will prompt to choose one
+
+```
+lockenv -d -e production
+```
++ You can specify an environment 
 + Recomended option if using inside pipelines or scripts
 
+
+#### Examples
 ```
-ferncrypter -d -e production -k keyfile or key-string
+lockenv -d -k key-string N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4= -f test.env
 ```
++ Decrypting specifying key and env file manually
