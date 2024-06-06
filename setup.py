@@ -7,7 +7,7 @@ setuptools.setup(
     scripts=["lockenv"],
     author="Abhiram Sreekumar",
     author_email="ferncrypter@randomsasi.in",
-    description="A utility to encrypt and decrypt env variables to safely store them in code repositories",
+    description="A CICD friendly pip package for encrypting env's to be stored safely in code repositories, No more hassle in handiling env's in cloud environments",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/abhiramsreekumar/lockenv",

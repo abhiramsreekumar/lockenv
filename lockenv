@@ -49,11 +49,19 @@ def arg_parse():
         default=0,
         help="specify env file",
     )
+    parser.add_argument(
+        "-editor",
+        action="store",
+        dest="editor",
+        default=None,
+        help="Specify editor",
+    )
     return [
         (parser.parse_args().environment),
         (parser.parse_args().decrypt),
         (parser.parse_args().key),
-        (parser.parse_args().efile)
+        (parser.parse_args().efile),
+        (parser.parse_args().editor)
     ]
 
 
@@ -155,11 +163,11 @@ def decrypt(key, env_file):
     return message
 
 
-def decrypt_open(key, env_file):
+def decrypt_open(key, env_file, editor):
     message = decrypt(key, env_file)
     open_write(env_file, "w", message)
     print("Editing in progress...")
-    open_editor(env_file)
+    open_editor(env_file, editor)
     print("Editor closed.")
     message = open_read(env_file, "r")
     encrypt(key, message, env_file)
@@ -199,14 +207,32 @@ def validatekey(key):
         return False
 
 
-def open_editor(file):
-    try:
-        subprocess.run(["code", file, "--wait"])
-    except Exception:
-        subprocess.run(["nano", file])
+def open_editor(file, editor):
+    if editor:
+        if editor == "nano" or editor == "vi" or editor == "vim":
+            try:
+                subprocess.run([editor, file])
+            except Exception:
+                try:
+                    subprocess.run(["vi", file])
+                except Exception:
+                    print("No Supported Editor Available\n\nRun lockenv -d and edit env file manually\n\n")
+        else:
+            try:
+                subprocess.run([editor, file, "--wait"])
+            except Exception:
+                try:
+                    subprocess.run(["vi", file])
+                except Exception:
+                    print("No Supported Editor Available\n\nRun lockenv -d and edit env file manually\n\n")
+    else:
+        try:
+            subprocess.run(["vi", file])
+        except Exception:
+            print("No Supported Editor Available\n\nRun lockenv -d and edit env file manually\n\n")        
 
 
-def run(key, file,  *args):
+def run(key, file, editor,  *args):
     key_name = env_name = "*"
     environment = ""
     if args:
@@ -232,7 +258,7 @@ def run(key, file,  *args):
 
     msg = open_read(env_file, "r")
     encrypt(key, msg, env_file)
-    decrypt_open(key, env_file)
+    decrypt_open(key, env_file, editor)
     print("Done")
 
 
@@ -265,16 +291,16 @@ def decryptrun(key, file, *args):
 
 
 if __name__ == "__main__":
-    environment, decrypts, key, file = arg_parse()
+    environment, decrypts, key, file, editor = arg_parse()
     if environment:
         if decrypts:
             decryptrun(key, file, environment)
         else:
-            run(key, file, environment)
+            run(key, file, editor, environment)
     else:
         if decrypts:
             print("Warning! No environment specified.")
             decryptrun(key, file)
         else:
             print("Warning! No environment specified.")
-            run(key, file)
+            run(key, file, editor)

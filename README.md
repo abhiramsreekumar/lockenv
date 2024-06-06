@@ -1,79 +1,72 @@
 # lockenv - encrypt and decrypt env files easily
 
-A Helper pip package for encrypting env's to be stored safely in code repositories
+A CICD friendly pip package for encrypting env's to be stored safely in code repositories.
+No more hassle in handiling env's in cloud environments
 
 
-#### Assumptions:
+##### Use Cases:
 
-+ Assuming python3 is installed on your system.
-+ Nano is installed on your system
-+ If you have VScode installed, better !
++ Encrypting and storing env variables in repositories using a master key
++ Include as part of Pipelines to decrypt env's
 
 
+### Installation
 Install `lockenv` on your system using : 
 
 ```
 pip install lockenv
 ```
 
-### Encryption Options
+### Usage
 
 ```
-lockenv
+lockenv -e dev -editor code
 ```
 
-+ The command will check for any 'fkey' files in the current path, if found will read the key, if not it will prompt to generate a new key
++ The command will check for 'dev.fkey' file in the current path, if found will read the key, if not it will prompt to generate a new key
 
-+ Secondly it will look for an env file in the current path, if found will read env, if nit will prompt to generate a new env
-
-+ It will automatically open the decrypted version of env in Visual Studio Code, if it is not installed, it will open nano editor
++ It will automatically open the decrypted version of env in VSCode, if it is not installed, it will open Vi
 
 + After editing the env file save it and close the file, it will be encrypted automatically
-
-![Default command Screenshot](https://raw.githubusercontent.com/abhiramsreekumar/lockenv/main/screenshots/default.png)
-
-```
-lockenv -e production
-```
-+ You can specify an environment, and it will open the environment specific key and env file, if not exist will create
 
 ![Default command Screenshot](https://raw.githubusercontent.com/abhiramsreekumar/lockenv/main/screenshots/environment-specific.png)
 
 ```
-lockenv -e production -k keyfile or key-string
+lockenv -d dev -editor code
+```
++ The command will check for 'dev.fkey' and dev.env in the current path, if found will read the key and env and decrypt the file
+
+
+```
+lockenv -e production -editor code -k keyfile or key-string
 ```
 
 + You can also specify keys manually
 + the key can be either the keyfile name or the key as a string
 
 ```
-lockenv -e production -f envfile
+lockenv -e production -editor code -f envfile
 ```
 + The env file can also be manually specified
 
-#### Examples
-```
-lockenv -k N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4= -f test.env
-```
-+ encrypting specifying key and env file manually
+#### Flags
+
++ `-e - Specify an environment (Eg: dev, staging)`
++ `-d - Decrypt env`
++ `-k - Specify key file or key as a string`
++ `-f - Specify env file`
 
 
-### Decryption Options
+#### Example Uses
+
+This will open the decrypted version of dev.env file for editing
+```
+lockenv -e dev -k N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4=
+```
+This will decrypt dev.env automatically without any further inputs
++ Recommended for Pipelines
 
 ```
-lockenv -d
+lockenv -d -e dev -k N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4=
 ```
-+ It will decypt the env file, if multiple env or keys are found it will prompt to choose one
 
-```
-lockenv -d -e production
-```
-+ You can specify an environment 
-+ Recomended option if using inside pipelines or scripts
-
-
-#### Examples
-```
-lockenv -d -k N_Wctg1YY7uyUmD8Cs4bq3VY6IsOHVbbeElpC-tpvE4= -f test.env
-```
-+ Decrypting specifying key and env file manually
