@@ -131,9 +131,13 @@ def read_envs(envs, *args):
 
 
 def open_read(file, open_type):
-    with open(file, open_type) as file_key:
-        read_val = file_key.read()
-    return read_val
+    try:
+        with open(file, open_type) as file_key:
+            read_val = file_key.read()
+            return read_val
+    except Exception:
+        print("Error reading file")
+        quit()
 
 
 def open_write(file, open_type, message):
@@ -144,23 +148,39 @@ def open_write(file, open_type, message):
 def encrypt(key, env, env_file):
     encrypted = validate_token(env)
     if not encrypted:
-        print("Encrypting...")
-        fernet = Fernet(key)
-        enc_message = fernet.encrypt(env.encode())
-        open_write(env_file, "wb", enc_message)
+        if validatekey(key):
+            print("Encrypting...")
+            fernet = Fernet(key)
+            try:
+                enc_message = fernet.encrypt(env.encode())
+                open_write(env_file, "wb", enc_message)
+            except Exception:
+                print("Encryption Failed, Aborting")
+                quit()
+        else:
+            print("Key is not valid")
+            quit()
 
 
 def decrypt(key, env_file):
-    print("Decrypting...")
-    message = open_read(env_file, "rb")
-    fernet = Fernet(key)
-    try:
-        message = fernet.decrypt(message).decode()
-        print("Decryption Successful")
-    except Exception:
-        print("Decryption failed")
+    if validatekey(key):
+        print("Decrypting...")
+        try:
+            message = open_read(env_file, "rb")
+        except Exception:
+            print("Env read error")
+            quit()
+        fernet = Fernet(key)
+        try:
+            message = fernet.decrypt(message).decode()
+            print("Decryption Successful")
+        except Exception:
+            print("Decryption failed")
+            quit()
+        return message
+    else:
+        print("Key is not valid")
         quit()
-    return message
 
 
 def decrypt_open(key, env_file, editor):
@@ -298,9 +318,8 @@ if __name__ == "__main__":
         else:
             run(key, file, editor, environment)
     else:
+        print("Warning! No environment specified.")
         if decrypts:
-            print("Warning! No environment specified.")
             decryptrun(key, file)
         else:
-            print("Warning! No environment specified.")
             run(key, file, editor)
